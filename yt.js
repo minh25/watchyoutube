@@ -46,7 +46,7 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
         log("init...");
         try{
             browser = await puppeteer.launch({
-                headless: false,
+                headless: true,
                 product: 'firefox',
                 args: [
                 '-wait-for-browser'
