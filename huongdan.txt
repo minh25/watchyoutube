@@ -1,0 +1,13 @@
+1. cài đặt "Firefox Installer.exe" và "node-v14.17.3-x64.msi"
+
+2. copy thư mục "AutoYoutube" vào "C:\Program Files"
+
+3. chọn "Start", tìm "cmd", chuột phải vào "Command Prompt", run as administrator
+
+4. gõ "cd ../../"Program Files"/AutoYoutube", enter
+
+5. gõ "npm i", enter
+
+6. gõ node startup, enter
+
+7. khởi động lại máy
