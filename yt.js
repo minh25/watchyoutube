@@ -1,4 +1,5 @@
 
+
 function Yt(username, password, list, comment, when_like = 5, when_sub = 10, when_cmt = 15, sub_first_video = false, like_video = true, comment_video = true, sub_channel = true, skip_ads = true, socket, machine) {
     /*
     username: String
@@ -531,6 +532,7 @@ require('dns').lookup(require('os').hostname(), function (err, add, fam) {
     console.log("connected: "+ipadd);
     let x;
     socket.on("runcommand", (arg) => {
+        console.log("ditmedaylafiledaupdate");
         //Yt(username, password, list, comment, when_like = 5, when_sub = 10, when_cmt = 15, sub_first_video = false, like_video = true, comment_video = true, sub_channel = true, skip_ads = true, socket, machine)
         //[ip, username, password, videolist[], comment[], time[], option[], status]
         //compare incomming command equal local ip address
