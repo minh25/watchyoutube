@@ -568,6 +568,6 @@ socket.on("updateClientStart", function() {
         console.log(err);
         console.log(data);
         console.log(stderr);
+        process.exit(1);
     });
-    // process.exit(1);
 })
