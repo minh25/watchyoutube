@@ -5,5 +5,5 @@ cmd.run("git pull", (err,data,stderr) => {
     console.log(data);
     console.log(stderr);
     cmd.run("node yt.js");
-    process.exit(1);
+    // process.exit(1);
 });
