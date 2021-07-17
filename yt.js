@@ -548,7 +548,7 @@ require('dns').lookup(require('os').hostname(), function (err, add, fam) {
                     
             socket.on('stopnow', (stop) => {
                 //console.log(stop + "----------" +ipadd);
-                if(stop==ipadd || stop =="all") {
+                if(stop==ipadd || stop =="all" || stop==ipadd.substr(0, 5)) {
                     console.log(stop + "----------" +ipadd);
                     x.shutdown();
                     console.log("tat day");
