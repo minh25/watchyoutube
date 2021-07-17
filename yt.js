@@ -565,9 +565,6 @@ setTimeout(getID, 1000)
 socket.on("updateClientStart", function() {
     console.log("startUpdateClient");
     cmd.run("node maintenance.js", (err,data,stderr) => {
-        console.log(err);
-        console.log(data);
-        console.log(stderr);
-        process.exit(1);
     });
+    socket.disconnect();
 })
