@@ -44,8 +44,8 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
 
     async function init_browser_and_new_page() {
         // init =====================================================================================
-        log("init update...");
         try{
+            log("init update...");
             browser = await puppeteer.launch({
                 headless: false,
                 product: 'firefox',
@@ -76,8 +76,8 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
 
     async function go_youtube() {
         // go page ==================================================================================
-        log("go to youtube...");
         try{
+            log("go to youtube...");
             await page.goto('https://www.youtube.com');
             //await page.screenshot({path: '1.2.png'});
         }catch(err){
@@ -87,8 +87,8 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
 
     async function sign_in_with_id_and_password(username, password) {
         // sign in ==================================================================================
-        log("sign in...");
         try{
+            log("sign in...");
             await page.waitForSelector('path[d="M12,0 C18.62375,0 24,5.37625 24,12 C24,18.62375 18.62375,24 12,24 C5.37625,24 0,18.62375 0,12 C0,5.37625 5.37625,0 12,0 Z M12,10.63625 C13.66,10.63625 15,9.29625 15,7.63625 C15,5.97625 13.66,4.63625 12,4.63625 C10.34,4.63625 9,5.97625 9,7.63625 C9,9.29625 10.34,10.63625 12,10.63625 Z M12,12.40875 C8.33375,12.40875 5.455,14.18125 5.455,15.8175 C6.84125,17.95 9.26875,19.3625 12,19.3625 C14.73125,19.3625 17.15875,17.95 18.545,15.8175 C18.545,14.18125 15.66625,12.40875 12,12.40875 Z"]', {
                 visible: true,
             });
@@ -126,8 +126,8 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
     };
 
     async function choose_random_video_in_main_page() {
-        log("watching random video in main page");
         try {
+            log("watching random video in main page");
             await delay(1000);
             //await page.screenshot({path: '3.1.png'});
             await page.click('ytd-rich-item-renderer.style-scope:nth-child(4)');
@@ -141,8 +141,8 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
     };
 
     async function choose_random_video_in_suggest_list() {
-        log("watching random video in suggest list");
         try {
+            log("watching random video in suggest list");
             while (true) {
                 try {
                     await page.click(`ytd-compact-video-renderer.style-scope:nth-child(${Math.floor(Math.random() * 8) + 1})`);
@@ -162,8 +162,8 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
 
     async function search_video_with_search_name(search_name) {
         // search ===================================================================================
-        log("search: "+search_name);
         try{
+            log("search: "+search_name);
             console.log(page.url());
             await delay(5000);
             await page.waitForSelector('input[name="search_query"]', {
@@ -191,8 +191,8 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
 
     async function choose_video_with_title_name(title_name) {
         // choose video =============================================================================
-        log("choose video: "+title_name);
         try{
+            log("choose video: "+title_name);
             await delay(2000);
             await page.waitForSelector(`a[id="video-title"][title="${title_name}"]` , {
                 visible: true,
@@ -205,8 +205,8 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
 
     async function choose_list_with_title_name(title_name) {
         // choose video =============================================================================
-        log("choose list: "+title_name);
         try{
+            log("choose list: "+title_name);
             await delay(2000);
             await page.waitForSelector(`span[id="video-title"][title="${title_name}"]` , {
                 visible: true,
@@ -276,8 +276,8 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
     };
 
     async function subcribe(title) {
-        log(`subscribe ${title}`);
         try{
+            log(`subscribe ${title}`);
             let x = await page.evaluate(
                 () => document.querySelector('ytd-subscribe-button-renderer[class="style-scope ytd-video-secondary-info-renderer"] > tp-yt-paper-button').getAttribute("subscribed")
             );
@@ -392,8 +392,8 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
 
     async function filter_list() {
         // filter ===================================================================================
-        log("filter");
         try{
+            log("filter");
             await delay(2000);
             await page.waitForSelector('path[d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"]', {
                 visible: true,
@@ -502,7 +502,9 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
     };
 
     this.shutdown = async function() {
-        await browser.close();
+        try {
+            await browser.close();    
+        } catch (error) {}
     };
 };
 
@@ -523,52 +525,52 @@ let socket = io.connect("http://171.244.143.245/", {
 //get own ID
 
 function getID() {
-require('dns').lookup(require('os').hostname(), function (err, add, fam) {
-    console.log(add);
-    add=add.split(".");
-    let ipadd = "NET01_" + add[3];
-    console.log(ipadd);
-    socket.emit("name", ipadd);
-    console.log("connected: "+ipadd);
-    let x;
-    socket.on("runcommand", (arg) => {
-        //Yt(username, password, list, comment, when_like = 5, when_sub = 10, when_cmt = 15, sub_first_video = false, like_video = true, comment_video = true, sub_channel = true, skip_ads = true, socket, machine)
-        //[ip, username, password, videolist[], comment[], time[], option[], status]
-        //compare incomming command equal local ip address
-        console.log(arg[0] + "          "+ipadd);
-        if(arg[0] == ipadd){
-            x = new Yt(arg[1], arg[2], arg[3], arg[4], arg[5][0], arg[5][2], arg[5][1], arg[6][0], arg[6][1], arg[6][2], arg[6][3], arg[6][4], socket, ipadd);
-            x.yt();
-                    
-            socket.on('stopnow', (stop) => {
-                //console.log(stop + "----------" +ipadd);
-                if(stop==ipadd) {
-                    console.log(stop + "----------" +ipadd);
-                    x.shutdown();
-                    console.log("tat day");
-                }
-                    
-            });
-
-        }
-    });
-
-    socket.on("restartStart", function() {
-        console.log("ok");
+    require('dns').lookup(require('os').hostname(), function (err, add, fam) {
+        console.log(add);
+        add=add.split(".");
+        let ipadd = "NET01_" + add[3];
+        console.log(ipadd);
         socket.emit("name", ipadd);
-    })
+        console.log("connected: "+ipadd);
+        let x;
+        socket.on("runcommand", (arg) => {
+            //Yt(username, password, list, comment, when_like = 5, when_sub = 10, when_cmt = 15, sub_first_video = false, like_video = true, comment_video = true, sub_channel = true, skip_ads = true, socket, machine)
+            //[ip, username, password, videolist[], comment[], time[], option[], status]
+            //compare incomming command equal local ip address
+            console.log(arg[0] + "          "+ipadd);
+            if(arg[0] == ipadd){
+                x = new Yt(arg[1], arg[2], arg[3], arg[4], arg[5][0], arg[5][2], arg[5][1], arg[6][0], arg[6][1], arg[6][2], arg[6][3], arg[6][4], socket, ipadd);
+                x.yt();
+                        
+                socket.on('stopnow', (stop) => {
+                    //console.log(stop + "----------" +ipadd);
+                    if(stop==ipadd) {
+                        console.log(stop + "----------" +ipadd);
+                        x.shutdown();
+                        console.log("tat day");
+                    }
+                        
+                });
 
-})
+            }
+        });
+
+        socket.on("restartStart", function() {
+            console.log("ok");
+            socket.emit("name", ipadd);
+        })
+
+        socket.on("updateClientStart", function() {
+            console.log("startUpdateClient");
+            // cmd.run("node maintenance.js", (err,data,stderr) => {
+            // });
+            cmd.run("git pull", (err,data,stderr) => {
+                cmd.run("node yt.js");
+            });
+            socket.disconnect();
+        })
+    })
 }
 
 setTimeout(getID, 1000)
 
-socket.on("updateClientStart", function() {
-    console.log("startUpdateClient");
-    // cmd.run("node maintenance.js", (err,data,stderr) => {
-    // });
-    cmd.run("git pull", (err,data,stderr) => {
-        cmd.run("node yt.js");
-    });
-    socket.disconnect();
-})
