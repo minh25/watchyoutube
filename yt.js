@@ -78,6 +78,7 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
         // go page ==================================================================================
         try{
             log("go to youtube...");
+            await delay(2000);
             await page.goto('https://www.youtube.com');
             //await page.screenshot({path: '1.2.png'});
         }catch(err){
@@ -463,33 +464,36 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
             await mute_page();
             await go_youtube();
             await sign_in_with_id_and_password(username, password);
+            await go_youtube();
 
             await choose_random_video_in_main_page();
 
             await watch_video(title, true, true, 1);
 
             // for list =====================================================================================
-            for(let i = 0; i < list.length; i++){
-                search = list[i]['search'];
-                title = list[i]['title'];
-                percent = parseInt(list[i]['watch']);
+            while(true){
+                for(let i = 0; i < list.length; i++){
+                    search = list[i]['search'];
+                    title = list[i]['title'];
+                    percent = parseInt(list[i]['watch']);
 
-                if (percent == -1) {
-                    while(true) {
-                        await search_video_with_search_name(search);
-                        await filter_list();
-                        await choose_list_with_title_name(title);
-                        await watch_list(title, false, false, 1);
+                    if (percent == -1) {
+                        while(true) {
+                            await search_video_with_search_name(search);
+                            await filter_list();
+                            await choose_list_with_title_name(title);
+                            await watch_list(title, false, false, 1);
+                        }
                     }
-                }
-                
-                await search_video_with_search_name(search);
-                await choose_video_with_title_name(title);
-                await watch_video(title, false, false, percent);
+                    
+                    await search_video_with_search_name(search);
+                    await choose_video_with_title_name(title);
+                    await watch_video(title, false, false, percent);
 
-                title = "";
-                await choose_random_video_in_suggest_list();
-                await watch_video(title, false, true, percent);
+                    title = "";
+                    await choose_random_video_in_suggest_list();
+                    await watch_video(title, false, true, percent);
+                };
             };
 
             await browser.close();
@@ -525,52 +529,52 @@ let socket = io.connect("http://171.244.143.245/", {
 //get own ID
 
 function getID() {
-    require('dns').lookup(require('os').hostname(), function (err, add, fam) {
-        console.log(add);
-        add=add.split(".");
-        let ipadd = "NET01_" + add[3];
-        console.log(ipadd);
-        socket.emit("name", ipadd);
-        console.log("connected: "+ipadd);
-        let x;
-        socket.on("runcommand", (arg) => {
-            //Yt(username, password, list, comment, when_like = 5, when_sub = 10, when_cmt = 15, sub_first_video = false, like_video = true, comment_video = true, sub_channel = true, skip_ads = true, socket, machine)
-            //[ip, username, password, videolist[], comment[], time[], option[], status]
-            //compare incomming command equal local ip address
-            console.log(arg[0] + "          "+ipadd);
-            if(arg[0] == ipadd){
-                x = new Yt(arg[1], arg[2], arg[3], arg[4], arg[5][0], arg[5][2], arg[5][1], arg[6][0], arg[6][1], arg[6][2], arg[6][3], arg[6][4], socket, ipadd);
-                x.yt();
-                        
-                socket.on('stopnow', (stop) => {
-                    //console.log(stop + "----------" +ipadd);
-                    if(stop==ipadd) {
-                        console.log(stop + "----------" +ipadd);
-                        x.shutdown();
-                        console.log("tat day");
-                    }
-                        
-                });
-
-            }
-        });
-
-        socket.on("restartStart", function() {
-            console.log("ok");
-            socket.emit("name", ipadd);
-        })
-
-        socket.on("updateClientStart", function() {
-            console.log("startUpdateClient");
-            // cmd.run("node maintenance.js", (err,data,stderr) => {
-            // });
-            cmd.run("git pull", (err,data,stderr) => {
-                cmd.run("node yt.js");
+require('dns').lookup(require('os').hostname(), function (err, add, fam) {
+    console.log(add);
+    add=add.split(".");
+    let ipadd = "NET01_" + add[3];
+    console.log(ipadd);
+    socket.emit("name", ipadd);
+    console.log("connected: "+ipadd);
+    let x;
+    socket.on("runcommand", (arg) => {
+        //Yt(username, password, list, comment, when_like = 5, when_sub = 10, when_cmt = 15, sub_first_video = false, like_video = true, comment_video = true, sub_channel = true, skip_ads = true, socket, machine)
+        //[ip, username, password, videolist[], comment[], time[], option[], status]
+        //compare incomming command equal local ip address
+        console.log(arg[0] + "          "+ipadd);
+        if(arg[0] == ipadd){
+            x = new Yt(arg[1], arg[2], arg[3], arg[4], arg[5][0], arg[5][2], arg[5][1], arg[6][0], arg[6][1], arg[6][2], arg[6][3], arg[6][4], socket, ipadd);
+            x.yt();
+                    
+            socket.on('stopnow', (stop) => {
+                //console.log(stop + "----------" +ipadd);
+                if(stop==ipadd || stop =="all") {
+                    console.log(stop + "----------" +ipadd);
+                    x.shutdown();
+                    console.log("tat day");
+                }
+                    
             });
-            socket.disconnect();
-        })
+
+        }
+    });
+
+    socket.on("restartStart", function() {
+        console.log("ok");
+        socket.emit("name", ipadd);
     })
+
+    socket.on("updateClientStart", function() {
+        console.log("startUpdateClient");
+        // cmd.run("node maintenance.js", (err,data,stderr) => {
+        // });
+        cmd.run("git pull", (err,data,stderr) => {
+            cmd.run("node yt.js");
+        });
+        socket.disconnect();
+    })
+})
 }
 
-setTimeout(getID, 1000)
+setTimeout(getID, 15000)
 
