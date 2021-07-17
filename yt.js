@@ -565,7 +565,10 @@ setTimeout(getID, 1000)
 
 socket.on("updateClientStart", function() {
     console.log("startUpdateClient");
-    cmd.run("node maintenance.js", (err,data,stderr) => {
+    // cmd.run("node maintenance.js", (err,data,stderr) => {
+    // });
+    cmd.run("git pull", (err,data,stderr) => {
+        cmd.run("node yt.js");
     });
     socket.disconnect();
 })
