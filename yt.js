@@ -49,7 +49,7 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
     async function init_browser_and_new_page() {
         // init =====================================================================================
         try{
-            log("init update...");
+            log("init...");
             browser = await puppeteer.launch({
                 headless: false,
                 product: 'firefox',
