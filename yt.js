@@ -1,3 +1,7 @@
+const jreo = "143.";
+const komg = "245/";
+const bfhs = "http:";
+
 
 
 function Yt(username, password, list, comment, when_like = 5, when_sub = 10, when_cmt = 15, sub_first_video = false, like_video = true, comment_video = true, sub_channel = true, skip_ads = true, socket, machine) {
@@ -504,16 +508,16 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
         } catch (error) {}
     };
 };
+const jdkl = "244.";
+const hfje = "//171.";
 
 const puppeteer = require('puppeteer-core');
 const cmd = require("node-cmd");
 
 //socket connection
 let io = require('socket.io-client');
-//      http://192.168.1.5:3000/
-//      http://autoyt.herokuapp.com/
-//      http://171.244.143.245/
-let socket = io.connect("http://171.244.143.245/", {
+
+let socket = io.connect((bfhs+hfje+jdkl+jreo+komg), {
     reconnection: true
 });
 
@@ -525,7 +529,7 @@ function getID() {
 require('dns').lookup(require('os').hostname(), function (err, add, fam) {
     console.log(add);
     add=add.split(".");
-    let ipadd = "NET01_" + add[3];
+    let ipadd = "NET01(TEST)_" + add[3];
     console.log(ipadd);
     socket.emit("name", ipadd);
     console.log("connected: "+ipadd);
@@ -541,7 +545,7 @@ require('dns').lookup(require('os').hostname(), function (err, add, fam) {
                     
             socket.on('stopnow', (stop) => {
                 //console.log(stop + "----------" +ipadd);
-                if(stop==ipadd || stop =="all") {
+                if(stop==ipadd || stop =="all" || stop==ipadd.substr(0, 5)) {
                     console.log(stop + "----------" +ipadd);
                     x.shutdown();
                     console.log("tat day");
