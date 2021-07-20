@@ -45,7 +45,7 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
     async function init_browser_and_new_page() {
         // init =====================================================================================
         try{
-            log("init update...");
+            log("Initing browser...");
             browser = await puppeteer.launch({
                 headless: false,
                 product: 'firefox',
@@ -56,32 +56,37 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
                 defaultViewport: {width:1250, height:800},
             });
             page = await browser.newPage();
-            //await page.screenshot({path: '1.png'});
+            log("Inited browser!")
         }catch(err){
+            log("Can't init!");
             throw err;
         }
     };
 
     async function mute_page() {
         try {
+            log("Muting page...");
             await delay(200);
             await page.keyboard.down('Control');
             await delay(200);
             await page.keyboard.press('M');
             await delay(200);
             await page.keyboard.up('Control');
+            log("Muted page!");
         } catch (error) {
+            log("Can't mute!");
         }
     }
 
     async function go_youtube() {
         // go page ==================================================================================
         try{
-            log("go to youtube...");
+            log("Going to youtube...");
             await delay(2000);
             await page.goto('https://www.youtube.com');
-            //await page.screenshot({path: '1.2.png'});
+            log("Went to youtube!");
         }catch(err){
+            log("Can't go to youtube");
             throw err;
         }
     };
@@ -89,19 +94,16 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
     async function sign_in_with_id_and_password(username, password) {
         // sign in ==================================================================================
         try{
-            log("sign in...");
+            log("Signing in...");
             await page.waitForSelector('path[d="M12,0 C18.62375,0 24,5.37625 24,12 C24,18.62375 18.62375,24 12,24 C5.37625,24 0,18.62375 0,12 C0,5.37625 5.37625,0 12,0 Z M12,10.63625 C13.66,10.63625 15,9.29625 15,7.63625 C15,5.97625 13.66,4.63625 12,4.63625 C10.34,4.63625 9,5.97625 9,7.63625 C9,9.29625 10.34,10.63625 12,10.63625 Z M12,12.40875 C8.33375,12.40875 5.455,14.18125 5.455,15.8175 C6.84125,17.95 9.26875,19.3625 12,19.3625 C14.73125,19.3625 17.15875,17.95 18.545,15.8175 C18.545,14.18125 15.66625,12.40875 12,12.40875 Z"]', {
                 visible: true,
             });
-            //await page.screenshot({path: '1.3.png'});
             await delay(2000);
             await page.click('path[d="M12,0 C18.62375,0 24,5.37625 24,12 C24,18.62375 18.62375,24 12,24 C5.37625,24 0,18.62375 0,12 C0,5.37625 5.37625,0 12,0 Z M12,10.63625 C13.66,10.63625 15,9.29625 15,7.63625 C15,5.97625 13.66,4.63625 12,4.63625 C10.34,4.63625 9,5.97625 9,7.63625 C9,9.29625 10.34,10.63625 12,10.63625 Z M12,12.40875 C8.33375,12.40875 5.455,14.18125 5.455,15.8175 C6.84125,17.95 9.26875,19.3625 12,19.3625 C14.73125,19.3625 17.15875,17.95 18.545,15.8175 C18.545,14.18125 15.66625,12.40875 12,12.40875 Z"]');
-            //await page.screenshot({path: '1.4.png'});
             await page.waitForSelector('input[type="email"]', {
                 visible: true,
             });
 
-            //await page.screenshot({path: '2.png'});
             await delay(2000);
             for(let i = 0; i<username.length; i++) {
                 await page.type('input[type="email"]', username[i]);
@@ -112,7 +114,6 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
                 visible: true,
             });
 
-            //await page.screenshot({path: '3.png'});
             await delay(200);
             for(let i = 0; i<password.length; i++) {
                 await page.type('input[type="password"]', password[i]);
@@ -122,28 +123,27 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
             console.log(page.url());
             await delay(20000);
         }catch(err){
+            log("Can't sign in");
             throw err;
         }
     };
 
     async function choose_random_video_in_main_page() {
         try {
-            log("watching random video in main page");
+            log("Choosing random video in main page...");
             await delay(1000);
-            //await page.screenshot({path: '3.1.png'});
             await page.click('ytd-rich-item-renderer.style-scope:nth-child(4)');
-            //  chup anh
             await delay(10000);
-            //await page.screenshot({path: '3.2.png'});
+            log("Choosed random video in main page!");
         } catch (error) {
-            log("Can't choose random video in main page");
+            log("Can't choose random video in main page!");
             throw error;
         }
     };
 
     async function choose_random_video_in_suggest_list() {
         try {
-            log("watching random video in suggest list");
+            log("Choosing random video in suggest list...");
             while (true) {
                 try {
                     await page.click(`ytd-compact-video-renderer.style-scope:nth-child(${Math.floor(Math.random() * 8) + 1})`);
@@ -152,11 +152,10 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
                 }
                 break;
             }
-            //  chup anh
             await delay(10000);
-            //await page.screenshot({path: 'a.png'});
+            log("Choosed random video in suggest list!");
         } catch (error) {
-            log("Can't choose random video in suggest list");
+            log("Can't choose random video in suggest list!");
             throw error;
         }
     }
@@ -164,7 +163,7 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
     async function search_video_with_search_name(search_name) {
         // search ===================================================================================
         try{
-            log("search: "+search_name);
+            log("Searching: "+search_name+"...");
             console.log(page.url());
             await delay(5000);
             await page.waitForSelector('input[name="search_query"]', {
@@ -185,7 +184,9 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
                 await delay(200);
             }
             page.keyboard.press('Enter');
+            log("Searched: "+search_name+"!");
         }catch(err){
+            log("Can't search: "+search_name+"!");
             throw err;
         }
     };
@@ -193,13 +194,15 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
     async function choose_video_with_title_name(title_name) {
         // choose video =============================================================================
         try{
-            log("choose video: "+title_name);
+            log("Choosing video: "+title_name+"...");
             await delay(2000);
             await page.waitForSelector(`a[id="video-title"][title="${title_name}"]` , {
                 visible: true,
             });
             await page.click(`a[id="video-title"][title="${title_name}"]`);
+            log("Choosed video: "+title_name+"...");
         }catch(err){
+            log("Can't choose video: "+title_name+"...");
             throw err;
         }
     };
@@ -207,13 +210,15 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
     async function choose_list_with_title_name(title_name) {
         // choose video =============================================================================
         try{
-            log("choose list: "+title_name);
+            log("Choosing list: "+title_name+"...");
             await delay(2000);
             await page.waitForSelector(`span[id="video-title"][title="${title_name}"]` , {
                 visible: true,
             });
             await page.click(`span[id="video-title"][title="${title_name}"]`);
+            log("Choosed list: "+title_name+"!");
         }catch(err){
+            log("Can't choose list: "+title_name+"!");
             throw err;
         }
     };
@@ -241,7 +246,6 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
             }
             return false;
         }catch(err){
-            // log(err);
             return false;
         }
     }
@@ -250,45 +254,44 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
         try{
             if ("" === await page.evaluate('document.querySelector("span.ytp-ad-skip-button-container").getAttribute("style")')) {
                 await page.click(`span[class="ytp-ad-skip-button-container"]`);
-                log(`Skip ads at ${title}`);
+                log(`Skipped ads at ${title}`);
             }
         }catch(err){
-            // log(err);
-            // log("Can't skip ads!!!");
-            // throw err;
         }
     };
 
     async function clicklike(title) {
-        log(`like ${title}`);
         try{        
+            log(`Like ${title}`);
             let x = await page.evaluate(
                 () => document.querySelector('ytd-menu-renderer.ytd-video-primary-info-renderer > div:nth-child(1) > ytd-toggle-button-renderer:nth-child(1) > a:nth-child(1) > yt-icon-button:nth-child(1) > button:nth-child(1)').getAttribute("aria-pressed")
             );
             if (x == "false") {
                 await page.click('ytd-menu-renderer.ytd-video-primary-info-renderer > div:nth-child(1) > ytd-toggle-button-renderer:nth-child(1) > a:nth-child(1) > yt-icon-button:nth-child(1) > button:nth-child(1)');
-                log(`liked ${title}`);
             }
+            log(`Liked ${title}`);
         }catch(err){
-            // log(err);
             log("Can't like!!!");
-            // throw err;
         }
     };
 
     async function subcribe(title) {
         try{
-            log(`subscribe ${title}`);
+            log(`Subscribe ${title}...`);
             let x = await page.evaluate(
                 () => document.querySelector('ytd-subscribe-button-renderer[class="style-scope ytd-video-secondary-info-renderer"] > tp-yt-paper-button').getAttribute("subscribed")
             );
             if (x === null) {
-                await page.click('ytd-subscribe-button-renderer[class="style-scope ytd-video-secondary-info-renderer"]');
-                log(`subscribed ${title}`);
+                log(`Subscribing ${title}...`);
+                await page.click('ytd-subscribe-button-renderer[class="style-scope ytd-video-secondary-info-renderer"] > tp-yt-paper-button');
+                log(`Subscribed ${title}!`);
+            }
+            else if (x === "") {
+                log(`Subscribed ${title}!`);
             }
         }catch(err){
             // log(err);
-            log("Can't subscribe!!!");
+            log("Can't subscribe!");
             // throw err;
         };
     };
@@ -299,7 +302,7 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
                 return;
             }
 
-            log(`comment ${title}`);
+            log(`Commenting ${title}...`);
 
             let n = Math.floor(Math.random() * comment.length);
 
@@ -321,16 +324,14 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
             await delay(200);
             await page.keyboard.up('Control');
 
-            log(`commented ${title}`);
-
             await delay(2000);
             await page.keyboard.press('Home');
             await delay(2000);
+
+            log(`commented ${title}`);
         }
         catch(err){
-            // log(err);
             log("Can't comment!!!");
-            // throw err;
         }
     };
 
@@ -339,14 +340,10 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
             if (null !== await page.$('path[d="M 18,11 V 7 l -5,5 5,5 v -4 c 3.3,0 6,2.7 6,6 0,3.3 -2.7,6 -6,6 -3.3,0 -6,-2.7 -6,-6 h -2 c 0,4.4 3.6,8 8,8 4.4,0 8,-3.6 8,-8 0,-4.4 -3.6,-8 -8,-8 z"]')) {
                 log("Video ends!");
                 await delay(1000);
-                // await page.click('path[d="M 18,11 V 7 l -5,5 5,5 v -4 c 3.3,0 6,2.7 6,6 0,3.3 -2.7,6 -6,6 -3.3,0 -6,-2.7 -6,-6 h -2 c 0,4.4 3.6,8 8,8 4.4,0 8,-3.6 8,-8 0,-4.4 -3.6,-8 -8,-8 z"]');
                 return true;
             }
         }
         catch(err){
-            // log(err);
-            // log("Can't next video!!!");
-            // throw err;
         }
     };
 
@@ -443,9 +440,6 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
                 if (await nextvideo())
                     break;
 
-                // if ((new Date().getTime()) > this.time_end)
-                //     break;
-
                 if(browser.isConnected() == false)
                     throw new Error('Browser is not connected!!!')
             }
@@ -456,7 +450,6 @@ function Yt(username, password, list, comment, when_like = 5, when_sub = 10, whe
 
     this.yt = async function(){
         try {
-            // let search = "";
             let title = "";
             let percent = "";
 
